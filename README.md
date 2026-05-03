@@ -43,7 +43,7 @@ _Студентка: Коробейникова Дарья Романовна\
 
 Установка Clang, LLVM, opt и Graphviz:
 
-![1](images/1.png)  
+![1](7/1.png)  
 *Рисунок 1 – Установка*
 
 ### 2. Исходный код
@@ -67,14 +67,14 @@ _Студентка: Коробейникова Дарья Романовна\
 
     clang -Xclang -ast-dump -fsyntax-only main.c
 
-![2](images/2.png)  
+![2](7/2.png)  
 *Рисунок 2 – AST-дамп*
 
 ### 4. Генерация LLVM IR
 
     clang -S -emit-llvm main.c -o main.ll
 
-![3](images/3.png)  
+![3](7/3.png)  
 *Рисунок 3 – main.ll*
 
 ### 5. Оптимизация IR
@@ -85,13 +85,13 @@ _Студентка: Коробейникова Дарья Романовна\
     clang -S -emit-llvm -O2 main.c -o main_O2.ll
     diff main_O0.ll main_O2.ll
 
-![4](images/4.png)  
+![4](7/4.png)  
 *Рисунок 4 – main_O0.ll*
 
-![5](images/5.png)  
+![5](7/5.png)  
 *Рисунок 5 – main_O2.ll*
 
-![6](images/6.png)  
+![6](7/6.png)  
 *Рисунок 6 – Сравнение -O0 и -O2*
 
 ### 6. Построение CFG
@@ -103,13 +103,13 @@ _Студентка: Коробейникова Дарья Романовна\
     dot -Tpng .main.dot -o cfg_main.png
     dot -Tpng .square.dot -o cfg_square.png
 
-![7](images/7.png)  
+![7](7/7.png)  
 *Рисунок 7 – Файлы .dot*
 
-![8](images/8.png)  
+![8](7/8.png)  
 *Рисунок 8 – CFG для main*
 
-![9](images/9.png)  
+![9](7/9.png)  
 *Рисунок 9 – CFG для square*
 
 ## Индивидуальное задание
@@ -132,7 +132,7 @@ _Студентка: Коробейникова Дарья Романовна\
 
     clang -O0 -S -emit-llvm const.c -o const_O0.ll
 
-![10](images/10.png)  
+![10](7/10.png)  
 *Рисунок 10 – const_O0.ll*
   
 Константа LIMIT сохраняется в IR как глобальная переменная (@LIMIT = dso_local constant i32 100).  
@@ -143,7 +143,7 @@ _Студентка: Коробейникова Дарья Романовна\
 
     clang -O2 -S -emit-llvm const.c -o const_O2.ll
 
-![11](images/11.png)  
+![11](7/11.png)  
 *Рисунок 11 – const_O2.ll*
 
 Переменная LIMIT полностью исчезает из IR. Граница цикла становится непосредственной константой 100, при этом цикл не размотан (компилятор вычисляет сумму 0+1+...+99 = 4950 на этапе компиляции и заменяет весь цикл на ret i32 4950).  
@@ -153,7 +153,7 @@ _Студентка: Коробейникова Дарья Романовна\
 
     diff const_O0.ll const_O2.ll
 
-![12](images/12.png)  
+![12](7/12.png)  
 *Рисунок 12 – Сравнение const_O0.ll и const_O2.ll*
 
 ### 3. Применение проходов -constprop (аналог sccp) и -ipsccp
@@ -166,10 +166,10 @@ _Студентка: Коробейникова Дарья Романовна\
     opt -passes=sccp -S const_O0.ll -o const_sccp.ll
     opt -passes=ipsccp -S const_O0.ll -o const_ipsccp.ll
 
-![13](images/13.png)  
+![13](7/13.png)  
 *Рисунок 13 – const_sccp.ll*
 
-![14](images/14.png)  
+![14](7/14.png)  
 *Рисунок 14 – const_ipsccp.ll*
 
 - sccp не смог полностью убрать LIMIT, так как глобальная константа находится вне функции.  
@@ -188,10 +188,10 @@ _Студентка: Коробейникова Дарья Романовна\
     opt -passes=dot-cfg -disable-output const_O2.ll
     dot -Tpng .main.dot -o cfg_O2.png
 
-![15](images/15.png)  
+![15](7/15.png)  
 *Рисунок 15 – cfg_O0.png*
 
-![16](images/16.png)  
+![16](7/16.png)  
 *Рисунок 16 – cfg_O2.png*
 
 - CFG для -O0: содержит один блок entry, внутри которого ~15 инструкций (alloca, load, вычисления, цикл).  
